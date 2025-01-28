@@ -6,8 +6,15 @@ body {
   margin: 0;
   font-family: Arial, sans-serif;
   text-align: center;
-  background-color: #89b1d9;
+  background-color: #85a7f0;
 }
+
+.title {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  color: rgb(3, 20, 91);
+}
+
 .anecdote {
   font-size: 1.5rem;
   margin-bottom: 1rem;

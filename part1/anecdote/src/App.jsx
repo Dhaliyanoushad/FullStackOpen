@@ -38,10 +38,16 @@ const App = () => {
 
   return (
     <>
-      <h1 className="anecdote">{anecdotes[selected]}</h1>
+      <h1 className="title">Anecdote of the Day</h1>
+      <h2 className="anecdote">{anecdotes[selected]}</h2>
       <p className="votes">Has {array[selected]} votes</p>
       <Button onClick={handleVote}>Vote</Button>
       <Button onClick={handleRandomAnecdote}>Next Anecdote</Button>
+
+      <h1 className="title">Anecdote with most votes</h1>
+      <h2 className="anecdote">
+        {anecdotes[array.indexOf(Math.max(...array))]}
+      </h2>
     </>
   );
 };
