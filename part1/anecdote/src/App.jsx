@@ -1,7 +1,12 @@
 import { useState } from "react";
+import "./App.css";
 
 const Button = ({ onClick, children }) => {
-  return <button onClick={onClick}>{children}</button>;
+  return (
+    <button onClick={onClick} className="btn">
+      {children}
+    </button>
+  );
 };
 
 const App = () => {
@@ -18,15 +23,24 @@ const App = () => {
 
   const [selected, setSelected] = useState(0);
 
+  const [array, setArray] = useState(Array(8).fill(0));
+
+  const handleVote = () => {
+    const copy = [...array];
+    copy[selected] += 1;
+    setArray(copy);
+  };
+
   const handleRandomAnecdote = () => {
     const randomIndex = Math.floor(Math.random() * 8);
     setSelected(randomIndex);
-    console.log(randomIndex);
   };
 
   return (
     <>
-      <h1>{anecdotes[selected]}</h1>
+      <h1 className="anecdote">{anecdotes[selected]}</h1>
+      <p className="votes">Has {array[selected]} votes</p>
+      <Button onClick={handleVote}>Vote</Button>
       <Button onClick={handleRandomAnecdote}>Next Anecdote</Button>
     </>
   );
