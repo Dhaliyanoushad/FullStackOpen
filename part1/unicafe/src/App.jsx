@@ -1,15 +1,29 @@
 import React, { useState } from "react";
 import "./App.css";
 
-const App = () => {
-  // Save clicks of each button to its own state
-  const [good, setGood] = useState(0);
-  const [neutral, setNeutral] = useState(0);
-  const [bad, setBad] = useState(0);
-  // Calculate statistics
+const Statistics = ({ good, neutral, bad }) => {
   const total = good + neutral + bad;
   const average = total === 0 ? 0 : (good - bad) / total;
   const positivePercentage = total === 0 ? 0 : (good / total) * 100;
+  return (
+    <>
+      <h2>Statistics</h2>
+      <div>
+        <p>Good: {good}</p>
+        <p>Neutral: {neutral}</p>
+        <p>Bad: {bad}</p>
+        <p>Total: {total}</p>
+        <p>Average: {average.toFixed(2)}</p>
+        <p>Positive: {positivePercentage.toFixed(2)}%</p>
+      </div>
+    </>
+  );
+};
+
+const App = () => {
+  const [good, setGood] = useState(0);
+  const [neutral, setNeutral] = useState(0);
+  const [bad, setBad] = useState(0);
   return (
     <div className="container">
       <h1>Give Feedback</h1>
@@ -25,20 +39,7 @@ const App = () => {
           Bad
         </button>
       </div>
-
-      <h2>Statistics</h2>
-      {total === 0 ? (
-        <p>No feedback given</p>
-      ) : (
-        <div>
-          <p>Good: {good}</p>
-          <p>Neutral: {neutral}</p>
-          <p>Bad: {bad}</p>
-          <p>Total: {total}</p>
-          <p>Average: {average.toFixed(2)}</p>
-          <p>Positive: {positivePercentage.toFixed(2)}%</p>
-        </div>
-      )}
+      <Statistics good={good} neutral={neutral} bad={bad} />
     </div>
   );
 };
