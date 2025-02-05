@@ -34,7 +34,6 @@ const App = () => {
   const handleNumChange = (event) => {
     setNewNum(event.target.value);
   };
-  const [filter, setFilter] = useState("");
   return (
     <div>
       <h2>Phonebook</h2>
