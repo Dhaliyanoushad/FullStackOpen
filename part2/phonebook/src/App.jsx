@@ -5,6 +5,7 @@ import Persons from "./components/Persons";
 import { useEffect } from "react";
 import axios from "axios";
 import numService from "./services/num";
+import num from "./services/num";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -43,6 +44,20 @@ const App = () => {
     });
   };
 
+  const handleDelete = (id) => {
+    const person = persons.find((p) => p.id === id);
+    if (person && window.confirm(`Delete ${person.name}?`)) {
+      numService
+        .remove(id)
+        .then(() => {
+          setPersons(persons.filter((p) => p.id !== id));
+        })
+        .catch((error) => {
+          console.error("Error deleting person:", error);
+        });
+    }
+  };
+
   const handleNameChange = (event) => {
     setNewName(event.target.value);
   };
@@ -62,7 +77,7 @@ const App = () => {
         handleNumChange={handleNumChange}
       />
       <h3>Numbers</h3>
-      <Persons persons={persons} />
+      <Persons persons={persons} handleDelete={handleDelete} />
     </div>
   );
 };
