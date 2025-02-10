@@ -9,6 +9,9 @@ import num from "./services/num";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
+  const [newName, setNewName] = useState("");
+  const [newNum, setNewNum] = useState("");
+  const [search, setSearch] = useState("");
   useEffect(() => {
     numService
       .getAll()
@@ -19,14 +22,27 @@ const App = () => {
         console.error(error.message);
       });
   }, []);
-  const [newName, setNewName] = useState("");
-  const [newNum, setNewNum] = useState("");
-  const [search, setSearch] = useState("");
 
   const addPerson = (event) => {
     event.preventDefault();
-    if (persons.some((person) => person.name === newName)) {
-      alert(`${newName} is already added to phonebook`);
+    const sameName = persons.find((person) => person.name === newName)
+      ? true
+      : false;
+    if (
+      sameName &&
+      window.confirm(
+        `${newName} is already added to the phonebook, replace the old number with a new one?`
+      )
+    ) {
+      setPersons(
+        persons.map((person) =>
+          person.name === newName ? { ...person, number: newNum } : person
+        )
+      );
+      numService.update(persons.find((person) => person.name === newName).id, {
+        name: newName,
+        number: newNum,
+      });
       return;
     }
     const personObject = {
