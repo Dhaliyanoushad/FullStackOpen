@@ -3,15 +3,16 @@ import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
 import { useEffect } from "react";
-import axios from "axios";
 import numService from "./services/num";
-import num from "./services/num";
+import Noti from "./components/Noti";
+import "./App.css";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNum, setNewNum] = useState("");
   const [search, setSearch] = useState("");
+  const [message, setMessage] = useState(null);
   useEffect(() => {
     numService
       .getAll()
@@ -43,6 +44,10 @@ const App = () => {
         name: newName,
         number: newNum,
       });
+      setMessage(`Updated ${newName}`);
+      setTimeout(() => {
+        setMessage(null);
+      }, 10000);
       return;
     }
     const personObject = {
@@ -55,8 +60,11 @@ const App = () => {
     setNewNum("");
 
     numService.create(personObject).then((response) => {
-      console.log(response);
       setPersons(persons.concat(response.data));
+      setMessage(`Added ${newName}`);
+      setTimeout(() => {
+        setMessage(null);
+      }, 10000);
     });
   };
 
@@ -67,6 +75,10 @@ const App = () => {
         .remove(id)
         .then(() => {
           setPersons(persons.filter((p) => p.id !== id));
+          setMessage(`Deleted ${person.name}`);
+          setTimeout(() => {
+            setMessage(null);
+          }, 10000);
         })
         .catch((error) => {
           console.error("Error deleting person:", error);
@@ -83,6 +95,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Noti message={message} />
       <Filter search={search} setSearch={setSearch} persons={persons} />
       <h3>Add a new</h3>
       <PersonForm
