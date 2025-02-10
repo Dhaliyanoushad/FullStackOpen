@@ -5,6 +5,7 @@ import Persons from "./components/Persons";
 import { useEffect } from "react";
 import numService from "./services/num";
 import Noti from "./components/Noti";
+import ErrorM from "./components/ErrorM";
 import "./App.css";
 
 const App = () => {
@@ -13,6 +14,7 @@ const App = () => {
   const [newNum, setNewNum] = useState("");
   const [search, setSearch] = useState("");
   const [message, setMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
   useEffect(() => {
     numService
       .getAll()
@@ -40,10 +42,19 @@ const App = () => {
           person.name === newName ? { ...person, number: newNum } : person
         )
       );
-      numService.update(persons.find((person) => person.name === newName).id, {
-        name: newName,
-        number: newNum,
-      });
+      numService
+        .update(persons.find((person) => person.name === newName).id, {
+          name: newName,
+          number: newNum,
+        })
+        .catch((error) => {
+          setErrorMessage(
+            `Information of ${newName} has already been removed from the server`
+          );
+          setTimeout(() => {
+            setErrorMessage(null);
+          }, 10000);
+        });
       setMessage(`Updated ${newName}`);
       setTimeout(() => {
         setMessage(null);
@@ -59,13 +70,23 @@ const App = () => {
     setNewName("");
     setNewNum("");
 
-    numService.create(personObject).then((response) => {
-      setPersons(persons.concat(response.data));
-      setMessage(`Added ${newName}`);
-      setTimeout(() => {
-        setMessage(null);
-      }, 10000);
-    });
+    numService
+      .create(personObject)
+      .then((response) => {
+        setPersons(persons.concat(response.data));
+        setMessage(`Added ${newName}`);
+        setTimeout(() => {
+          setMessage(null);
+        }, 10000);
+      })
+      .catch((error) => {
+        setErrorMessage(
+          `Information of ${newName} has already been removed from the server`
+        );
+        setTimeout(() => {
+          setErrorMessage(null);
+        }, 10000);
+      });
   };
 
   const handleDelete = (id) => {
@@ -81,7 +102,12 @@ const App = () => {
           }, 10000);
         })
         .catch((error) => {
-          console.error("Error deleting person:", error);
+          setErrorMessage(
+            `Information of ${newName} has already been removed from the server`
+          );
+          setTimeout(() => {
+            setErrorMessage(null);
+          }, 10000);
         });
     }
   };
@@ -95,6 +121,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <ErrorM errorMessage={errorMessage} />
       <Noti message={message} />
       <Filter search={search} setSearch={setSearch} persons={persons} />
       <h3>Add a new</h3>

@@ -19,10 +19,6 @@ const PersonForm = ({
       </div>
       <div>
         <button type="submit">add</button>
-        <div>
-          filter shown with:{" "}
-          <input onChange={(event) => setFilter(event.target.value)} />
-        </div>
       </div>
     </form>
   );
