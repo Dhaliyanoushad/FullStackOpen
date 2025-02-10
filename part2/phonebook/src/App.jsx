@@ -4,12 +4,13 @@ import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
 import { useEffect } from "react";
 import axios from "axios";
+import numService from "./services/num";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   useEffect(() => {
-    axios
-      .get("http://localhost:3001/persons")
+    numService
+      .getAll()
       .then((response) => {
         setPersons(response.data);
       })
@@ -36,12 +37,10 @@ const App = () => {
     setNewName("");
     setNewNum("");
 
-    axios
-      .post("http://localhost:3001/persons", personObject)
-      .then((response) => {
-        console.log(response);
-        setPersons(persons.concat(response.data));
-      });
+    numService.create(personObject).then((response) => {
+      console.log(response);
+      setPersons(persons.concat(response.data));
+    });
   };
 
   const handleNameChange = (event) => {
