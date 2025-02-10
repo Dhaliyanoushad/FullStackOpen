@@ -9,7 +9,7 @@ const App = () => {
   const [persons, setPersons] = useState([]);
   useEffect(() => {
     axios
-      .get("http://localhost:3001/person")
+      .get("http://localhost:3001/persons")
       .then((response) => {
         setPersons(response.data);
       })
@@ -29,12 +29,19 @@ const App = () => {
     }
     const personObject = {
       name: newName,
-      num: newNum,
+      number: newNum,
     };
 
     setPersons(persons.concat(personObject));
     setNewName("");
     setNewNum("");
+
+    axios
+      .post("http://localhost:3001/persons", personObject)
+      .then((response) => {
+        console.log(response);
+        setPersons(persons.concat(response.data));
+      });
   };
 
   const handleNameChange = (event) => {
