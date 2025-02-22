@@ -15,7 +15,6 @@ const PersonForm = ({
       <div>
         Number:{" "}
         <input
-          type="number"
           value={newNum}
           onChange={handleNumChange}
           placeholder="Format: XX-XXXXXX or XXX-XXXXX"
